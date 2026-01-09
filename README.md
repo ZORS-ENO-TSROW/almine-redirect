@@ -60,6 +60,20 @@
         .fallback.show {
             display: block;
         }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -71,19 +85,28 @@
         <div class="fallback" id="fallback">
             <p><strong>App didn't open automatically?</strong></p>
             <p>Please open the ALMine app manually to complete your password reset.</p>
+            <p style="font-size: 14px; margin-top: 30px; opacity: 0.8;">
+                If you don't have the app installed, please download it from Google Play Store.
+            </p>
         </div>
     </div>
 
     <script>
-        const fragment = window.location.hash.substring(1);
+        // Get the full URL fragment (everything after #)
+        const fragment = window.location.hash.substring(1); // Remove the leading '#'
+        
         console.log('🔍 Redirect page loaded');
         console.log('📋 URL fragment:', fragment);
         
         if (fragment) {
+            // Construct the deep link with the full fragment
             const deepLink = `almine://reset-password#${fragment}`;
             console.log('🔗 Attempting to open:', deepLink);
+            
+            // Try to open the app
             window.location.href = deepLink;
             
+            // Show fallback message after 3 seconds
             setTimeout(() => {
                 document.getElementById('spinner').style.display = 'none';
                 document.getElementById('title').textContent = '⚠️ Manual Action Required';
@@ -91,9 +114,10 @@
                 document.getElementById('fallback').classList.add('show');
             }, 3000);
         } else {
+            // No token in URL
             document.getElementById('spinner').style.display = 'none';
             document.getElementById('title').textContent = '❌ Invalid Reset Link';
-            document.getElementById('message').textContent = 'This password reset link is invalid or expired.';
+            document.getElementById('message').textContent = 'This password reset link is invalid or expired. Please request a new one from the app.';
         }
     </script>
 </body>
